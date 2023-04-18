@@ -1,13 +1,36 @@
-from flask import Flask, request, jsonify
-
+import flask
 from main import process1, process2
 
-
-app = Flask(__name__)
+app = flask.Flask(__name__)
 
 @app.route('/')
 def index():
-    return jsonify({'message': 'Welcome'})
+    return flask.jsonify({'message': 'Welcome'})
 
-# TODO: Create a flask app with two routes, one for each function.
-# The route should get the data from the request, call the function, and return the result.
+@app.route('/process1', methods=['POST'])
+def route_process1():
+    # Get data from request
+    data = flask.request.get_json()
+    # Call process1 with data
+    result = process1(data)
+
+    # Return result as JSON response
+    return flask.jsonify(result)
+
+# Route for process2
+@app.route('/process2', methods=['POST'])
+def route_process2():
+    # Get data from request
+    data = flask.request.get_json()
+    # Call process1 with data
+    result = process2(data)
+
+    # Return result as JSON response
+    return flask.jsonify(result)
+@app.route('/delay', methods=['POST'])
+def delay():
+    message = flask.request.data
+    return message
+
+if __name__ == "__main__":
+    app.run(host='172.20.10.2',port=8000)
